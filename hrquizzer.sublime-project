@@ -1,0 +1,24 @@
+{
+	"build_systems":
+	[
+		{
+			"cmd":
+			[
+				"/Users/lyla/VirtualEnvs/jobpuller/bin/python2.7",
+				"$file"
+			],
+			"name": "JobPuller Env"
+		}
+	],
+	"folders":
+	[
+		{
+			"follow_symlinks": true,
+			"path": "."
+		}
+	],
+	"settings":
+	{
+		"python_interpreter": "/Users/lyla/VirtualEnvs/jobpuller/bin/python2.7"
+	}
+}
