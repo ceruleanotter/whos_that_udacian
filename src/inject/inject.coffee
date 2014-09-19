@@ -1,5 +1,10 @@
+#TODO: 
+#DONE add score
+#make the css pretty
+#Add drop down or autocomplete
+#make something really magical happen when they win
+# add little sorting animations
 removedPhotos = false
-
 toggleForm = (lientry) ->
   quiz = lientry.find(".hr_quiz").fadeToggle()
   basics = lientry.find(".basics").fadeToggle()
@@ -15,6 +20,14 @@ showNormal = (lientry) ->
   lientry.find(".basics").fadeIn()
   #if basics.visible()
 
+increaseScore = (isExpert) ->
+  score = $(".score_correct")
+  if isExpert
+    score = $(".score_correct_first")
+  newScore = parseInt(score.text()) + 1
+  score.text(newScore.toString())
+
+
 checkAnswer = (clickedObject, basicsSelector, answerSelector, textProcessing) ->
 
   answerArray = clickedObject.val().toLowerCase().split("")
@@ -26,14 +39,18 @@ checkAnswer = (clickedObject, basicsSelector, answerSelector, textProcessing) ->
   answer = clickedObject.parent().next(".basics").find(basicsSelector).text()#.split(",")
   if textProcessing
     answer = textProcessing(answer).trim()
-  console.log answerRegex
-  console.log "pressed enter in the answer box"
-  console.log "the text is " + answer
+
 
   answerSpan = clickedObject.next(answerSelector)
 
   unless answer.toLowerCase().search(answerRegex) is -1
     console.log "Correct the answer is " + answer
+
+    #check if they got it right on the first try
+    increaseScore(false)
+    if answerSpan.text().length < 1 
+      increaseScore(true)
+
     fadeTextChange(answerSpan, "Correct the answer is " + answer)
     clickedObject.val(answer)
     clickedObject.prop("readonly", true)
@@ -62,6 +79,8 @@ putRandomPos = (entryselector, max) ->
 
 
 setUpGame = () ->
+  scorearea = $("<div class=\"score_area\"><span class=\"score_text\"><h2>Score:</h2><span class=\"score_correct\"></span>/<span class=\"score_total\"></span></span><br><span class=\"score_text\"><h2>Expert Mode Score:</h2><span class=\"score_correct_first\"></span>/<span class=\"score_total\"></span></span></div>")
+  scorearea.insertAfter $(".intro_area")
 
   quiz_element = $("<div class=\"hr_quiz\" solved=\"0\"> First name:<input type=\"text\" name=\"name\" class=\"em_name\"><span hint=\"0\" class=\"an_name hintcont\"></span><br> Team: <input type=\"text\" name=\"title\" class=\"em_team\"><span class=\"an_team hintcont\" hint=\"0\"></span> </div>")
 
@@ -83,6 +102,8 @@ setUpGame = () ->
         return e[0])
 
 
+
+
   return NUM_INPUTS
 
 
@@ -90,11 +111,23 @@ setUpGame = () ->
 
 resetGame = (numinputs) ->
   emPics = $(".empPhoto")
+
+  swaps = $(".entry").length - 1
+  totalEmpPic = 0
+
+  console.log("the number of entries is " + swaps)
   for el in $(".basics").parent()
     unless /udacity.bamboohr.com/.test($(el).find(emPics).attr("src"))
       showQuiz($(el))
+      totalEmpPic++
     #swap around
-  swaps = $(".entry").length - 1
+  
+  #Fade in the scores
+  $(".score_total").text(totalEmpPic*2)
+  $(".score_correct").text("0")
+  $(".score_correct_first").text("0")
+  $(".score_area").fadeIn()
+  
   for i in [0..swaps*2] by 1
     putRandomPos($(".entry"), swaps)
   $('.hintcont').attr('hint', '0')
@@ -126,10 +159,10 @@ chrome.extension.sendMessage {}, (response) ->
       
       # ----------------------------------------------------------
       
-      intro = $("<h1>Hi....Jon?</h1><div class=\"intro_area\">Udacity's gotten a lot bigger since the good ol' days. Do you really know that new Course Developer's name? The friendly one who always says hi in the morning? Wasn't it Mark? Sam? Jon..a..if...er?<br/><br/><button class=\"play_button\" type=\"button\">Prove Your Name-Fu</button></div>")
+      intro = $("<h3>Hi....Jon?</h3><div class=\"intro_area\">Udacity's gotten a lot bigger since the good ol' days. Do you really know that new Course Developer's name? The friendly one who always says hi in the morning? Wasn't it Mark? Sam? Jon..a..if...er?<br/><br/><button class=\"play_button\" type=\"button\">Prove Your Name-Fu</button></div>")
       intro.insertAfter $("#contentTop")
 
-      scorearea = $("<div class=\"score_area\"><span class=\"score_text\">Score:<span class=\"score_correct\"></span>/<span class=\"score_total\"></span></span><br><span class=\"score_text\">Expert Mode Score:<span class=\"score_correct_first\"></span>/<span class=\"score_total\"></span></span></div>")
+      
       
       $(".play_button").click ->
         $(".branded-icon").css("visibility", "hidden")

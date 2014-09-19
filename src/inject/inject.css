@@ -6,7 +6,7 @@
 	visibility: hidden;
 }*/
 
-.hr_quiz {
+.hr_quiz, .score_area {
 	display: none;
 }
 /*
