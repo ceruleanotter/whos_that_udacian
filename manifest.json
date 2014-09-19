@@ -33,7 +33,9 @@
         "src/inject/inject.css"
       ],
       "js": [
+        "js/jquery/jquery.js",
         "src/inject/inject.js"
+
       ]
     }
   ]

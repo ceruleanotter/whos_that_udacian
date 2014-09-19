@@ -2,6 +2,18 @@
  * Place your custom CSS styles here.
  **/
 
-body.employeeSection {
-	background: red;
+/*dl.basics{
+	visibility: hidden;
+}*/
+
+.hr_quiz {
+	display: none;
 }
+/*
+.branded-icon {
+	visibility: hidden;
+}
+
+.entry {
+	border-bottom: solid #d9d9d9 1px;
+}*/
