@@ -1,3 +1,5 @@
+removedPhotos = false
+
 toggleForm = (lientry) ->
   quiz = lientry.find(".hr_quiz").fadeToggle()
   basics = lientry.find(".basics").fadeToggle()
@@ -79,23 +81,39 @@ setUpGame = () ->
       checkAnswer($(this), $(".location"), ".an_team", (e) ->
         e = e.split("-")
         return e[0])
+
+
   return NUM_INPUTS
 
 
 
 
 resetGame = (numinputs) ->
+  emPics = $(".empPhoto")
   for el in $(".basics").parent()
-    showQuiz($(el))
+    unless /udacity.bamboohr.com/.test($(el).find(emPics).attr("src"))
+      showQuiz($(el))
     #swap around
   swaps = $(".entry").length - 1
-  for i in [0..swaps] by 1
+  for i in [0..swaps*2] by 1
     putRandomPos($(".entry"), swaps)
   $('.hintcont').attr('hint', '0')
   quizel = $('.hr_quiz')
   quizel.attr('solved', numinputs)
   quizel.find("input").val("")
   $(".hintcont").text("")
+
+  #remove the letterheadings that have no children
+  for header, i in $(".letterHeader")
+    if $(header).find("li").length < 1
+      console.log("removing " + header)
+      $(header).remove()
+  if !removedPhotos
+    for photo in emPics
+      if /udacity.bamboohr.com/.test($(photo).attr("src"))
+        $(photo).attr("src",chrome.extension.getURL('images/faceless.png'))
+    removedPhotos = true
+
 
 chrome.extension.sendMessage {}, (response) ->
   readyStateCheckInterval = setInterval(->
