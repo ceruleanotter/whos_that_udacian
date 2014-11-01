@@ -8,7 +8,39 @@
 
 .hr_quiz, .score_area {
 	display: none;
+
 }
+
+.hr_quiz {
+	padding-left: 113px;
+}
+
+.hr_quiz .span_q_title {
+width: 100px;
+display: inline-block;
+}
+.hr_quiz input {
+margin: 5px;
+}
+
+.sp_name {
+font-weight: 600;
+font-family: 'Source Sans Pro',Arial, Helvetica, sans-serif;
+font-size: 18px;
+margin-bottom: 3px;
+margin-top: -2px;
+
+}
+
+.sp_team {
+margin-bottom: 2px;
+line-height: 15px;
+color: #555555;
+}
+
+
+
+
 /*
 .branded-icon {
 	visibility: hidden;
